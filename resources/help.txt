@@ -1,0 +1,11 @@
+Minecraft.class line 1802 has mouse input handling. 
+
+Usiing while mouse.next consumes all events so they have to be handled if only a subset of mouse
+events are to be disabled. See the line above.
+
+Player movement can be disabled in the same place by consuming dx and dy.
+
+The keyboard is tricky too, some solutions:
+    Change the movementInput variable in player. Downsides, only effects movement.
+    
+    Rebind keys to somewhere else. Downsides, can still be pressed by the player.
