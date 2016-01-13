@@ -36,14 +36,14 @@ public class EventCollection {
 	@SubscribeEvent
 	public void onCameraSetup(EntityViewRenderEvent.CameraSetup e){
 		if (Strider.engaged){
-			Camera.engageStriderCamera(e.entity.posX,e.entity.posY,e.entity.posZ);
+			CameraStrider.update(e);
 		}
 	}
 	
 	@SubscribeEvent
 	public void onTickPlayer(TickEvent.PlayerTickEvent e){
 		Strider.tickPrintCnt++;
-		if (Strider.tickPrintCnt > 24)Strider.tickPrintCnt = 0;
+		if (Strider.tickPrintCnt > 24*2)Strider.tickPrintCnt = 0;
 	}
 	
 	@SubscribeEvent
@@ -62,8 +62,7 @@ public class EventCollection {
 	public void onTickClient(TickEvent.ClientTickEvent e){
 		if (e.phase == Phase.START){
 			if (Strider.engaged){
-				// Force third person view.
-				mc.gameSettings.thirdPersonView = 1;
+				Strider.applyTickSettings();
 				
 				// Consume and handle all mouse (button) input events.
 //				while (Mouse.next()){
@@ -88,7 +87,7 @@ public class EventCollection {
 	
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent e) {
-        if(KeyBindings.enableStrider.isPressed()) {
+        if(KeyBindingsStrider.enableStrider.isPressed()) {
         	if (Strider.engaged) 
         		Strider.disable();
         	else

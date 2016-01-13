@@ -6,12 +6,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MovementInputComputer extends MovementInput
+public class MovementInputStrider extends MovementInput
 {
     private final GameSettings gameSettings;
     private static final String __OBFID = "CL_00000937";
 
-    public MovementInputComputer(GameSettings gameSettingsIn)
+    public MovementInputStrider(GameSettings gameSettingsIn)
     {
         this.gameSettings = gameSettingsIn;
     }
@@ -21,22 +21,23 @@ public class MovementInputComputer extends MovementInput
         this.moveStrafe = 0.0F;
         this.moveForward = 0.0F;
 
-        if (this.gameSettings.keyBindForward.isKeyDown())
+        if (KeyBindingsStrider.playerForward.isKeyDown())
         {
             ++this.moveForward;
         }
 
-        if (this.gameSettings.keyBindBack.isKeyDown())
+        if (KeyBindingsStrider.playerBack.isKeyDown())
         {
+        	System.out.println("Does this happen");
             --this.moveForward;
         }
 
-        if (this.gameSettings.keyBindLeft.isKeyDown())
+        if (KeyBindingsStrider.playerLeft.isKeyDown())
         {
             ++this.moveStrafe;
         }
 
-        if (this.gameSettings.keyBindRight.isKeyDown())
+        if (KeyBindingsStrider.playerRight.isKeyDown())
         {
             --this.moveStrafe;
         }
