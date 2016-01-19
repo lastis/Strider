@@ -11,10 +11,14 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -47,15 +51,59 @@ public class EventCollection {
 	}
 	
 	@SubscribeEvent
+	public void onPlayerUpdate(LivingUpdateEvent e){
+		if(e.entityLiving instanceof EntityPlayerSP && Strider.engaged){
+//			EntityPlayerSP thePlayer = (EntityPlayerSP) e.entityLiving;
+//			thePlayer.renderArmPitch = thePlayer.renderArmPitch + 10;
+		}
+	}
+	
+//	@SubscribeEvent
+//	public void onPreRenderHand(RenderHandEvent e){
+//		if (Strider.engaged){
+////			EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+////			thePlayer.renderArmPitch = thePlayer.prevRenderArmPitch + 60;
+////			thePlayer.renderArmYaw = thePlayer.prevRenderArmYaw + 120;
+//		}
+//	}
+	
+	@SubscribeEvent
 	public void onTickRender(TickEvent.RenderTickEvent e){
 		if (e.phase == Phase.START){
 			if (Strider.engaged){
+				CameraStrider.forward = 0;
+				CameraStrider.strafe = 0;
+		        if (mc.gameSettings.keyBindForward.isKeyDown()){
+		        	CameraStrider.forward++;
+		        }
+		        if (mc.gameSettings.keyBindBack.isKeyDown()){
+		        	CameraStrider.forward--;
+		        }
+		        if (mc.gameSettings.keyBindLeft.isKeyDown()){
+		        	CameraStrider.strafe++;
+		        }
+		        if (mc.gameSettings.keyBindRight.isKeyDown()){
+		        	CameraStrider.strafe--;
+		        }
+//				EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+//				thePlayer.renderArmPitch = thePlayer.prevRenderArmPitch + 60;
+//				thePlayer.renderArmYaw = thePlayer.prevRenderArmYaw + 60;
 				// Can disable some mouse input by consuming these inputs.
 //				Mouse.getDX();
 //				Mouse.getDY();
 //				Mouse.getDWheel();
 			}
 		}
+		if (e.phase == Phase.END){
+			if (Strider.engaged){
+				
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void renderLast(RenderWorldLastEvent event){
+		
 	}
 	
 	@SubscribeEvent
@@ -70,16 +118,6 @@ public class EventCollection {
 //				}
 				// Post new events.
 				if (Strider.tickPrintCnt == 0){
-//					try {
-//						Robot r = new Robot();
-//						r.mousePress(java.awt.event.InputEvent.BUTTON2_MASK);
-//						r.mouseRelease(java.awt.event.InputEvent.BUTTON2_MASK);
-//						// Make the system catch the new events. 
-//						Display.update();
-//					} catch (AWTException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
 				}
 			}	
 		}	
@@ -93,5 +131,6 @@ public class EventCollection {
         	else
         		Strider.engage();
         }
+        if (!Strider.engaged) return;
     }
 }

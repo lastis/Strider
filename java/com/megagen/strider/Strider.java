@@ -1,8 +1,11 @@
 package com.megagen.strider;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MovementInput;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,7 +26,6 @@ public class Strider
 	private static Minecraft mc;
 	private static boolean oldViewBobbing;
 	private static int oldThidPersonView;
-	private static EntityRenderer oldRenderer;
     
     @EventHandler
     public void init(FMLInitializationEvent event)
@@ -42,20 +44,42 @@ public class Strider
 		}
     	mc = Minecraft.getMinecraft();
     	oldInput = mc.thePlayer.movementInput;
-    	oldRenderer = mc.entityRenderer;
-    	mc.entityRenderer = new EntityRendererStrider(mc,mc.getResourceManager());
     	mc.thePlayer.movementInput = new MovementInputStrider(mc.gameSettings);
+//    	renderHand(false);
     	CameraStrider.onStriderEngage();
     }
     
-    public static void storeTickSettings(){
+    private static void renderHand(boolean render) {
+    	Field field;
+		try {
+			field = EntityRenderer.class.getDeclaredField("renderHand");
+			field.setAccessible(true);
+			try {
+				field.set(mc.entityRenderer, render);
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void storeTickSettings(){
     	oldViewBobbing = mc.gameSettings.viewBobbing;
     	oldThidPersonView = mc.gameSettings.thirdPersonView;
     }
     
     public static void applyTickSettings(){
     	// Applied every tick.
-    	mc.gameSettings.thirdPersonView = 0;
+    	mc.gameSettings.thirdPersonView = 1;
     	mc.gameSettings.viewBobbing = false;
     }
     
@@ -71,6 +95,6 @@ public class Strider
 		}
     	removeTickSettings();
     	mc.thePlayer.movementInput = oldInput;
-    	mc.entityRenderer = oldRenderer;
+    	renderHand(true);
     }
 }
