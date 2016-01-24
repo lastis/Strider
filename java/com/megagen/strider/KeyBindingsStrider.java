@@ -24,19 +24,11 @@ public class KeyBindingsStrider {
 		playerBack = new KeyBinding("Back",Keyboard.KEY_DOWN,"Strider");
 		playerRight = new KeyBinding("Right",Keyboard.KEY_RIGHT,"Strider");
 		playerLeft = new KeyBinding("Left",Keyboard.KEY_LEFT,"Strider");
-//		cameraLeft = new KeyBinding("Camera Left",Keyboard.KEY_A,"Strider");
-//		cameraRight = new KeyBinding("Camera Right",Keyboard.KEY_D,"Strider");
-//		cameraForward = new KeyBinding("Camera Forward",Keyboard.KEY_W,"Strider");
-//		cameraBack = new KeyBinding("Camera Back",Keyboard.KEY_S,"Strider");
 		ClientRegistry.registerKeyBinding(enableStrider);
 		ClientRegistry.registerKeyBinding(playerForward);
 		ClientRegistry.registerKeyBinding(playerBack);
 		ClientRegistry.registerKeyBinding(playerRight);
 		ClientRegistry.registerKeyBinding(playerLeft);
-//		ClientRegistry.registerKeyBinding(cameraLeft);
-//		ClientRegistry.registerKeyBinding(cameraRight);
-//		ClientRegistry.registerKeyBinding(cameraForward);
-//		ClientRegistry.registerKeyBinding(cameraBack);
 	}
 
 }

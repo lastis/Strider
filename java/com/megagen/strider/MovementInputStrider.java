@@ -18,33 +18,33 @@ public class MovementInputStrider extends MovementInput
 
     public void updatePlayerMoveState()
     {
-        this.moveStrafe = 0.0F;
-        this.moveForward = 0.0F;
-
-        if (KeyBindingsStrider.playerForward.isKeyDown())
-        {
-            ++this.moveForward;
-        }
-
-        if (KeyBindingsStrider.playerBack.isKeyDown())
-        {
-        	System.out.println("Does this happen");
-            --this.moveForward;
-        }
-
-        if (KeyBindingsStrider.playerLeft.isKeyDown())
-        {
-            ++this.moveStrafe;
-        }
-
-        if (KeyBindingsStrider.playerRight.isKeyDown())
-        {
-            --this.moveStrafe;
-        }
-
-        this.jump = this.gameSettings.keyBindJump.isKeyDown();
-        this.sneak = this.gameSettings.keyBindSneak.isKeyDown();
-
+//        this.moveStrafe = 0.0F;
+//        this.moveForward = 0.0F;
+//
+//        if (KeyBindingsStrider.playerForward.isKeyDown())
+//        {
+//            ++this.moveForward;
+//        }
+//
+//        if (KeyBindingsStrider.playerBack.isKeyDown())
+//        {
+//        	System.out.println("Does this happen");
+//            --this.moveForward;
+//        }
+//
+//        if (KeyBindingsStrider.playerLeft.isKeyDown())
+//        {
+//            ++this.moveStrafe;
+//        }
+//
+//        if (KeyBindingsStrider.playerRight.isKeyDown())
+//        {
+//            --this.moveStrafe;
+//        }
+//
+//        this.jump = this.gameSettings.keyBindJump.isKeyDown();
+//        this.sneak = this.gameSettings.keyBindSneak.isKeyDown();
+//
         if (this.sneak)
         {
             this.moveStrafe = (float)((double)this.moveStrafe * 0.3D);
