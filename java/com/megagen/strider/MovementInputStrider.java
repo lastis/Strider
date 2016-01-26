@@ -18,6 +18,9 @@ public class MovementInputStrider extends MovementInput
 
     public void updatePlayerMoveState()
     {
+    	this.moveForward = Strider.striderAI.forward;
+    	this.moveStrafe = Strider.striderAI.strafe;
+    	this.jump = Strider.striderAI.jump;
 //        this.moveStrafe = 0.0F;
 //        this.moveForward = 0.0F;
 //

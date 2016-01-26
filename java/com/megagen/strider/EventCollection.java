@@ -123,7 +123,17 @@ public class EventCollection {
 				Strider.applyTickSettings();
 				if (Mouse.isButtonDown(0))
 				{
-					Strider.striderAI.targetBlock(CameraStrider.mop.getBlockPos());
+					if (Strider.DEBUG) {
+						System.out.println(CameraStrider.mop.toString());
+					}
+					Strider.striderAI.walkToBlock(CameraStrider.mop.getBlockPos());
+				}
+				if (Mouse.isButtonDown(1))
+				{
+					if (Strider.DEBUG) {
+						System.out.println(CameraStrider.mop.toString());
+					}
+					Strider.striderAI.faceBlock(CameraStrider.mop.getBlockPos());
 				}
 				while (Mouse.next()) {
 	                int i = Mouse.getEventButton();

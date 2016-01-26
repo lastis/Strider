@@ -59,6 +59,10 @@ public class CameraStrider {
 		cameraZ = (float) (thePlayer.posZ + ActiveRenderInfo.getPosition().zCoord);
 	}
 	
+	public static void printPlayerPosition(){
+		System.out.println("Player pos: ("+entityX+","+entityY+","+entityZ+")");
+	}
+	
 	public static void printCameraPosition() {
 		EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
 		System.out
@@ -116,16 +120,12 @@ public class CameraStrider {
         }
         
         mop = rayTraceMouse();
-        if (mop != null)
-        {
-//        	mc.renderGlobal.drawSelectionBox((EntityPlayer)e.entity, mop, 0, (float) e.renderPartialTicks);
-        }
 
 		if (Strider.DEBUG && Strider.tickPrintCnt == 0) {
 			printCameraPosition();
-			if (mop != null) {
-				System.out.println(mop.toString());
-			}
+//			if (mop != null) {
+//				System.out.println(mop.toString());
+//			}
 		}
 		
 	}
