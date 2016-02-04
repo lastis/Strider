@@ -1,4 +1,4 @@
-package com.megagen.strider;
+package com.megagen.strider.settings;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -70,7 +70,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.biome.BiomeGenBase;
 
-public class EntityRendererStrider extends EntityRenderer {
+public class StriderEntityRenderer extends EntityRenderer {
     private static final Logger logger = LogManager.getLogger();
     private static final ResourceLocation locationRainPng = new ResourceLocation("textures/environment/rain.png");
     private static final ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
@@ -155,7 +155,7 @@ public class EntityRendererStrider extends EntityRenderer {
 	public float prevCameraYaw;
     private static final String __OBFID = "CL_00000947";
 
-	public EntityRendererStrider(Minecraft mcIn, IResourceManager p_i45076_2_) 
+	public StriderEntityRenderer(Minecraft mcIn, IResourceManager p_i45076_2_) 
 	{
 		super(mcIn, p_i45076_2_);
 		
@@ -1009,7 +1009,7 @@ public class EntityRendererStrider extends EntityRenderer {
                         private static final String __OBFID = "CL_00000948";
                         public String call()
                         {
-                            return EntityRendererStrider.this.mc.currentScreen.getClass().getCanonicalName();
+                            return StriderEntityRenderer.this.mc.currentScreen.getClass().getCanonicalName();
                         }
                     });
                     crashreportcategory.addCrashSectionCallable("Mouse location", new Callable()
@@ -1025,7 +1025,7 @@ public class EntityRendererStrider extends EntityRenderer {
                         private static final String __OBFID = "CL_00000951";
                         public String call()
                         {
-                            return String.format("Scaled: (%d, %d). Absolute: (%d, %d). Scale factor of %d", new Object[] {Integer.valueOf(scaledresolution.getScaledWidth()), Integer.valueOf(scaledresolution.getScaledHeight()), Integer.valueOf(EntityRendererStrider.this.mc.displayWidth), Integer.valueOf(EntityRendererStrider.this.mc.displayHeight), Integer.valueOf(scaledresolution.getScaleFactor())});
+                            return String.format("Scaled: (%d, %d). Absolute: (%d, %d). Scale factor of %d", new Object[] {Integer.valueOf(scaledresolution.getScaledWidth()), Integer.valueOf(scaledresolution.getScaledHeight()), Integer.valueOf(StriderEntityRenderer.this.mc.displayWidth), Integer.valueOf(StriderEntityRenderer.this.mc.displayHeight), Integer.valueOf(scaledresolution.getScaleFactor())});
                         }
                     });
                     throw new ReportedException(crashreport);

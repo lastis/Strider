@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -245,10 +247,17 @@ public class AStar {
 		 * for (Tile o : open) { if (o.equals(t)) { return o; } } return null;
 		 */
 	}
+	
+	public Block getRelative(BlockPos pos, int x, int y, int z){
+		BlockPos pos_new = new BlockPos(pos.getX()+x,pos.getY()+y,pos.getZ()+z);
+		Block b = w.getBlockState(pos).getBlock();
+		return b;
+	}
 
 	private boolean isTileWalkable(Tile t) {
-//		BlockPos l = new BlockPos((sx + t.getX()), (sy + t.getY()), (sz + t.getZ()));
-//		Block b = mc.theWorld.getBlockState(l).getBlock();
+//		BlockPos pos = new BlockPos((sx + t.getX()), (sy + t.getY()), (sz + t.getZ()));
+//		IBlockState blockState = w.getBlockState(pos);
+//		Block b = blockState.getBlock();
 //		int i = Block.getIdFromBlock(b);
 //
 //		// lava, fire, wheat and ladders cannot be walked on, and of course air
@@ -256,10 +265,10 @@ public class AStar {
 //		if (i != 10 && i != 11 && i != 51 && i != 59 && i != 65 && i != 0 && i != 85 && i != 107 && i != 113 && !canBlockBeWalkedThrough(i)) {
 //			// make sure the blocks above are air
 //			
-//			if (b.getRelative(0, 1, 0).getTypeId() == 107) {
+//			if (Block.getIdFromBlock(getRelative(pos, 0, 1, 0)) == 107) {
 //				// fench gate check, if closed continue
-//				Gate g = new Gate(b.getRelative(0, 1, 0).getData());
-//				return (g.isOpen() ? (b.getRelative(0, 2, 0).getTypeId() == 0) : false);
+//				BlockFenceGate g = (BlockFenceGate) b;
+//				return (g.isPassable(w, pos) ? (Block.getIdFromBlock(getRelative(pos,0, 2, 0)) == 0) : false);
 //			}
 //			return (canBlockBeWalkedThrough(b.getRelative(0, 1, 0).getTypeId()) && b.getRelative(0, 2, 0).getTypeId() == 0);
 //

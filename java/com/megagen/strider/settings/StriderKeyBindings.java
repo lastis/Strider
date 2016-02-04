@@ -1,4 +1,4 @@
-package com.megagen.strider;
+package com.megagen.strider.settings;
 
 
 import org.lwjgl.input.Keyboard;
@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-public class KeyBindingsStrider {
+public class StriderKeyBindings {
 
 	public static KeyBinding enableStrider;
 	public static KeyBinding playerForward;

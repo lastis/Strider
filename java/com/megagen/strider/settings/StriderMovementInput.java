@@ -1,4 +1,8 @@
-package com.megagen.strider;
+package com.megagen.strider.settings;
+
+
+
+import com.megagen.strider.Strider;
 
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.MovementInput;
@@ -6,21 +10,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MovementInputStrider extends MovementInput
+public class StriderMovementInput extends MovementInput
 {
     private final GameSettings gameSettings;
     private static final String __OBFID = "CL_00000937";
 
-    public MovementInputStrider(GameSettings gameSettingsIn)
+    public StriderMovementInput(GameSettings gameSettingsIn)
     {
         this.gameSettings = gameSettingsIn;
     }
 
     public void updatePlayerMoveState()
     {
-    	this.moveForward = Strider.striderAI.forward;
-    	this.moveStrafe = Strider.striderAI.strafe;
-    	this.jump = Strider.striderAI.jump;
+    	this.moveForward = Strider.ai.forward;
+    	this.moveStrafe = Strider.ai.strafe;
+    	this.jump = Strider.ai.jump;
 //        this.moveStrafe = 0.0F;
 //        this.moveForward = 0.0F;
 //

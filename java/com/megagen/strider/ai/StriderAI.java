@@ -1,4 +1,7 @@
-package com.megagen.strider;
+package com.megagen.strider.ai;
+
+import com.megagen.strider.Strider;
+import com.megagen.strider.render.StriderCamera;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -19,7 +22,7 @@ public class StriderAI {
 	public float forward = 0;
 	public float strafe = 0;
 	public BlockPos targetBlock;
-	public Command curCommand = Command.NONE;
+	public EnumCommand curCommand = EnumCommand.NONE;
 	public boolean jump;
 
 	public StriderAI(Minecraft mc, EntityPlayerSP thePlayer) 
@@ -31,26 +34,26 @@ public class StriderAI {
 	public void faceBlock(BlockPos pos)
 	{
 		targetBlock = pos;
-		curCommand = Command.VIEWING;
+		curCommand = EnumCommand.VIEWING;
 	}
 	
 	public void walkToBlock(BlockPos pos)
 	{
 		targetBlock = pos;
-		curCommand = Command.WALK_TO;
+		curCommand = EnumCommand.WALK_TO;
 	}
 	
 	private void calculateAngles()
 	{
-		double dx = targetBlock.getX() + 0.5 - CameraStrider.entityX;
-		double dy = targetBlock.getY() + 0.5 - CameraStrider.entityY - thePlayer.eyeHeight;
-		double dz = targetBlock.getZ() + 0.5 - CameraStrider.entityZ;
+		double dx = targetBlock.getX() + 0.5 - Strider.camera.entityX;
+		double dy = targetBlock.getY() + 0.5 - Strider.camera.entityY - thePlayer.eyeHeight;
+		double dz = targetBlock.getZ() + 0.5 - Strider.camera.entityZ;
 		targetYaw = -(float) (Math.atan2(dx, dz)/Math.PI*180);
 		targetPitch = -(float) (Math.atan2(dy,Math.sqrt(dz*dz+dx*dx))/Math.PI*180);
-		if (curCommand == Command.WALK_TO) targetPitch = 0;
+		if (curCommand == EnumCommand.WALK_TO) targetPitch = 0;
 	}
 	
-	public void onTick(float dTick)
+	public void onRenderTick(float dTick)
 	{
 		pitch = thePlayer.rotationPitch;
 		yaw = (float) (thePlayer.rotationYaw - 360 * Math.floor((thePlayer.rotationYaw+180)/360));
@@ -61,7 +64,7 @@ public class StriderAI {
 			break;
 		case VIEWING:
 			if (facingTarget) {
-				curCommand = Command.NONE;
+				curCommand = EnumCommand.NONE;
 			}
 			calculateAngles();
 			faceTarget(dTick);
@@ -69,7 +72,7 @@ public class StriderAI {
 		case WALK_TO:
 			checkPosition();
 			if (standingOnTarget) {
-				curCommand = Command.NONE;
+				curCommand = EnumCommand.NONE;
 			}
 			calculateAngles();
 			faceTarget(dTick);
@@ -92,9 +95,9 @@ public class StriderAI {
 	}
 
 	private void checkPosition() {
-		if (Math.floor(CameraStrider.entityX) == targetBlock.getX() && 
-				Math.floor(CameraStrider.entityY) == targetBlock.getY()+1 &&
-				Math.floor(CameraStrider.entityZ) == targetBlock.getZ()){
+		if (Math.floor(Strider.camera.entityX) == targetBlock.getX() && 
+				Math.floor(Strider.camera.entityY) == targetBlock.getY()+1 &&
+				Math.floor(Strider.camera.entityZ) == targetBlock.getZ()){
 			standingOnTarget = true;
 		}
 		else{

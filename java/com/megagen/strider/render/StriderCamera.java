@@ -1,10 +1,12 @@
-package com.megagen.strider;
+package com.megagen.strider.render;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+
+import com.megagen.strider.Strider;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -18,31 +20,34 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 
-public class CameraStrider {
+public class StriderCamera {
 	static float init_offset_x = 0;
 	static float init_offset_y = 0F;
 	static float init_offset_z = -2F;
-	private static Minecraft mc;
-	public static double forward = 0;
-	public static double strafe = 0;
-	public static double up = 0;
-	public static double prevCameraX;
-	public static double prevCameraY;
-	public static double prevCameraZ;
+	private Minecraft mc;
+	public double forward = 0;
+	public double strafe = 0;
+	public double up = 0;
+	public double prevCameraX;
+	public double prevCameraY;
+	public double prevCameraZ;
 	static double cameraX;
 	static double cameraY;
 	static double cameraZ;
 	static double cameraSpeed = 0.4;
-	public static double entityX;
-	public static double entityY;
-	public static double entityZ;
-	public static int viewType = 0;
-	public static MovingObjectPosition mop;
+	public double entityX;
+	public double entityY;
+	public double entityZ;
+	public int viewType = 0;
+	public MovingObjectPosition mop;
 
 	// static float camera_x_init;
 	// static float camera_y_init;
 	// static float camera_z_init;
 	// private static EntityPlayerSP thePlayer;
+	public StriderCamera(Minecraft mc) {
+		this.mc = mc;
+	}
 
 	public static void onStriderEngage() {
 		setCameraPos();
@@ -59,11 +64,11 @@ public class CameraStrider {
 		cameraZ = (float) (thePlayer.posZ + ActiveRenderInfo.getPosition().zCoord);
 	}
 	
-	public static void printPlayerPosition(){
+	public void printPlayerPosition(){
 		System.out.println("Player pos: ("+entityX+","+entityY+","+entityZ+")");
 	}
 	
-	public static void printCameraPosition() {
+	public void printCameraPosition() {
 		EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
 		System.out
 				.println("Camera: " //
@@ -77,7 +82,8 @@ public class CameraStrider {
 								.getPosition().zCoord));
 	}
 
-	public static void update(EntityViewRenderEvent.CameraSetup e) {
+	public void onCameraSetup(EntityViewRenderEvent.CameraSetup e) {
+		if (!Strider.engaged) return;
 		mc = Minecraft.getMinecraft();
 		entityX = e.entity.lastTickPosX + (e.entity.posX - e.entity.lastTickPosX) * (double)e.renderPartialTicks;
         entityY = e.entity.lastTickPosY + (e.entity.posY - e.entity.lastTickPosY) * (double)e.renderPartialTicks;
@@ -130,7 +136,7 @@ public class CameraStrider {
 		
 	}
 
-	private static MovingObjectPosition rayTraceMouse() {
+	private MovingObjectPosition rayTraceMouse() {
 		IntBuffer viewport = GLAllocation.createDirectIntBuffer(16);
 		FloatBuffer modelview = GLAllocation.createDirectFloatBuffer(16);
 		FloatBuffer projection = GLAllocation.createDirectFloatBuffer(16);
