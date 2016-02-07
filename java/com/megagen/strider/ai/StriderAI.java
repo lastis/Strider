@@ -1,7 +1,7 @@
 package com.megagen.strider.ai;
 
 import com.megagen.strider.Strider;
-import com.megagen.strider.render.StriderCamera;
+import com.megagen.strider.camera.StriderCamera;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -45,9 +45,9 @@ public class StriderAI {
 	
 	private void calculateAngles()
 	{
-		double dx = targetBlock.getX() + 0.5 - Strider.camera.entityX;
-		double dy = targetBlock.getY() + 0.5 - Strider.camera.entityY - thePlayer.eyeHeight;
-		double dz = targetBlock.getZ() + 0.5 - Strider.camera.entityZ;
+		double dx = targetBlock.getX() + 0.5 - Strider.playerX;
+		double dy = targetBlock.getY() + 0.5 - Strider.playerY - thePlayer.eyeHeight;
+		double dz = targetBlock.getZ() + 0.5 - Strider.playerZ;
 		targetYaw = -(float) (Math.atan2(dx, dz)/Math.PI*180);
 		targetPitch = -(float) (Math.atan2(dy,Math.sqrt(dz*dz+dx*dx))/Math.PI*180);
 		if (curCommand == EnumCommand.WALK_TO) targetPitch = 0;
@@ -95,9 +95,9 @@ public class StriderAI {
 	}
 
 	private void checkPosition() {
-		if (Math.floor(Strider.camera.entityX) == targetBlock.getX() && 
-				Math.floor(Strider.camera.entityY) == targetBlock.getY()+1 &&
-				Math.floor(Strider.camera.entityZ) == targetBlock.getZ()){
+		if (Math.floor(Strider.playerX) == targetBlock.getX() && 
+				Math.floor(Strider.playerY) == targetBlock.getY()+1 &&
+				Math.floor(Strider.playerZ) == targetBlock.getZ()){
 			standingOnTarget = true;
 		}
 		else{

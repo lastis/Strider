@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import com.megagen.strider.Strider;
-import com.megagen.strider.render.StriderCamera;
+import com.megagen.strider.camera.StriderCamera;
 import com.megagen.strider.settings.StriderKeyBindings;
 
 import net.minecraft.block.Block;
@@ -44,6 +44,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -69,22 +70,23 @@ public class EventCollection {
 	@SubscribeEvent
 	public void onCameraSetup(EntityViewRenderEvent.CameraSetup e){
 		if (!Strider.initialized) return;
+		Strider.onCameraSetup(e);
 		Strider.camera.onCameraSetup(e);
 	}
 	
-	@SubscribeEvent
-	public void onTickPlayer(TickEvent.PlayerTickEvent e){
-		if (!Strider.initialized) return;
-
-	}
+//	@SubscribeEvent
+//	public void onTickPlayer(TickEvent.PlayerTickEvent e){
+//		if (!Strider.initialized) return;
+//
+//	}
 	
-	@SubscribeEvent
-	public void onPlayerUpdate(LivingUpdateEvent e){
-		if (!Strider.initialized) return;
-		if(e.entityLiving instanceof EntityPlayerSP && Strider.engaged){
-			
-		}
-	}
+//	@SubscribeEvent
+//	public void onPlayerUpdate(LivingUpdateEvent e){
+//		if (!Strider.initialized) return;
+//		if(e.entityLiving instanceof EntityPlayerSP && Strider.engaged){
+//			
+//		}
+//	}
 	
 //	@SubscribeEvent
 //	public void onPreRenderHand(RenderHandEvent e){
@@ -113,7 +115,7 @@ public class EventCollection {
 	@SubscribeEvent
 	public void renderLast(RenderWorldLastEvent e){
 		if (!Strider.initialized) return;
-		Strider.renderer.onRenderLast();
+		Strider.renderer.onRenderLast(e);
 	}
 	
 	@SubscribeEvent
@@ -127,85 +129,8 @@ public class EventCollection {
 	}
 	
 	@SubscribeEvent
-	public void onRenderCursorBlock(DrawBlockHighlightEvent e){
-		if (!Strider.initialized) return;
-//			double d0 = CameraStrider.entityX;
-//            double d1 = CameraStrider.entityY;
-//            double d2 = CameraStrider.entityZ;
-//            BlockPos blockpos = CameraStrider.mop.getBlockPos();
-//            IBlockState blockState = mc.theWorld.getBlockState(blockpos);
-//            Block block = blockState.getBlock();
-//            AxisAlignedBB boundingBox = block.getSelectedBoundingBox(mc.theWorld, blockpos).offset(-d0, -d1, -d2);
-//            
-//            BlockPos topPos = blockpos.offset(EnumFacing.UP);
-//            Tessellator tessellator = Tessellator.getInstance();
-//            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-//            
-//			if (mc.theWorld.getWorldBorder().contains(topPos))
-//			{
-//				// sssss
-////				worldrenderer.startDrawingQuads();
-////				worldrenderer.setVertexFormat(DefaultVertexFormats.BLOCK);
-////				GlStateManager.disableLighting();
-////				GlStateManager.enableLighting();
-////				GlStateManager.enableTexture2D();
-////				GlStateManager.depthMask(true);
-////				GlStateManager.disableBlend();
-////				worldrenderer.startDrawing(7);
-////				worldrenderer.setVertexFormat(DefaultVertexFormats.BLOCK);
-////				worldrenderer.setTranslation((double)(-topPos.getX()), (double)(-topPos.getY()), (double)(-topPos.getZ()));
-////				worldrenderer.setTranslation(-d0, -d1, -d2);
-////				
-////				mc.getBlockRendererDispatcher().renderBlock(blockState, topPos, mc.theWorld, worldrenderer);
-////				IBakedModel ibakedmodel = mc.getBlockRendererDispatcher().getModelFromBlockState(blockState, mc.theWorld, blockpos);
-////				mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModelStandard(mc.theWorld, ibakedmodel, block, topPos, worldrenderer,true);
-//				
-////                tessellator.draw();
-////                GlStateManager.disableLighting();
-////                GlStateManager.enableLighting();
-//                // ssss
-//				
-////				GlStateManager.enableBlend();
-//				GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-//				GlStateManager.color(0.0F, 0.0F, 0.0F, 1.0F);
-//				GL11.glLineWidth(4.0F);
-//				GlStateManager.disableTexture2D();
-//				GlStateManager.depthMask(true);
-////				GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
-//				
-//				worldrenderer.startDrawing(3);
-//				
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
-//				tessellator.draw();
-//				worldrenderer.startDrawing(3);
-//				
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
-//				tessellator.draw();
-//				worldrenderer.startDrawing(1);
-//				
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.maxY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.minY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ);
-//				worldrenderer.addVertex(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.minY, boundingBox.maxZ);
-//				worldrenderer.addVertex(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ);
-//				tessellator.draw();
-//				GlStateManager.depthMask(false);
-//				GlStateManager.enableTexture2D();
-////				GlStateManager.disableBlend();
-//			}
-//            
-////			mc.renderGlobal.drawSelectionBox(e.player, CameraStrider.mop, 0, (float) e.partialTicks);
+	public void onCraft(PlayerEvent.ItemCraftedEvent e){
+		System.out.println("Crafting");
 	}
 	
 	@SubscribeEvent
@@ -216,5 +141,13 @@ public class EventCollection {
         	if (Strider.engaged) Strider.disengage();
         	else Strider.engage();
         }
+        if (!Strider.initialized) return;
+        Strider.inputProcessor.onKeyInput(e);
     }
+	
+	@SubscribeEvent
+	public void onRenderCursorBlock(DrawBlockHighlightEvent e){
+		if (!Strider.initialized) return;
+	}
+	
 }

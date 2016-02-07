@@ -3,8 +3,8 @@ package com.megagen.strider;
 import java.lang.reflect.Field;
 
 import com.megagen.strider.ai.StriderAI;
+import com.megagen.strider.camera.StriderCamera;
 import com.megagen.strider.mcinterface.EventCollection;
-import com.megagen.strider.render.StriderCamera;
 import com.megagen.strider.render.StriderRenderer;
 import com.megagen.strider.settings.StriderEntityRenderer;
 import com.megagen.strider.settings.StriderInputProcessor;
@@ -25,6 +25,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovementInput;
+import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +49,9 @@ public class Strider
 	public static StriderInputProcessor inputProcessor;
 	public static StriderRenderer renderer;
 	public static StriderCamera camera;
+	public static double playerX;
+	public static double playerY;
+	public static double playerZ;
 	private static Minecraft mc;
     
     @EventHandler
@@ -94,18 +98,9 @@ public class Strider
     	initialized = true;
     }
     
-    public static void renderBlock(){
-    	double d0 = camera.entityX;
-        double d1 = camera.entityY;
-        double d2 = camera.entityZ;
-        BlockPos blockpos = camera.mop.getBlockPos();
-        IBlockState blockState = mc.theWorld.getBlockState(blockpos);
-        Block block = blockState.getBlock();
-        AxisAlignedBB boundingBox = block.getSelectedBoundingBox(mc.theWorld, blockpos).offset(-d0, -d1, -d2);
-        
-        BlockPos topPos = blockpos.offset(EnumFacing.UP);
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        mc.getBlockRendererDispatcher().renderBlock(blockState, blockpos, mc.theWorld, worldrenderer);
-    }
+	public static void onCameraSetup(CameraSetup e) {
+		playerX = e.entity.lastTickPosX + (e.entity.posX - e.entity.lastTickPosX) * (double)e.renderPartialTicks;
+		playerY = e.entity.lastTickPosY + (e.entity.posY - e.entity.lastTickPosY) * (double)e.renderPartialTicks;
+		playerZ = e.entity.lastTickPosZ + (e.entity.posZ - e.entity.lastTickPosZ) * (double)e.renderPartialTicks;
+	}
 }

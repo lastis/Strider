@@ -1,4 +1,4 @@
-package com.megagen.strider.render;
+package com.megagen.strider.camera;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -35,9 +35,6 @@ public class StriderCamera {
 	static double cameraY;
 	static double cameraZ;
 	static double cameraSpeed = 0.4;
-	public double entityX;
-	public double entityY;
-	public double entityZ;
 	public int viewType = 0;
 	public MovingObjectPosition mop;
 
@@ -65,7 +62,7 @@ public class StriderCamera {
 	}
 	
 	public void printPlayerPosition(){
-		System.out.println("Player pos: ("+entityX+","+entityY+","+entityZ+")");
+		System.out.println("Player pos: ("+Strider.playerX+","+Strider.playerY+","+Strider.playerZ+")");
 	}
 	
 	public void printCameraPosition() {
@@ -84,54 +81,43 @@ public class StriderCamera {
 
 	public void onCameraSetup(EntityViewRenderEvent.CameraSetup e) {
 		if (!Strider.engaged) return;
+		// Seems to notify some renderer to render chunks.
+		mc.renderGlobal.setDisplayListEntitiesDirty();
 		mc = Minecraft.getMinecraft();
-		entityX = e.entity.lastTickPosX + (e.entity.posX - e.entity.lastTickPosX) * (double)e.renderPartialTicks;
-        entityY = e.entity.lastTickPosY + (e.entity.posY - e.entity.lastTickPosY) * (double)e.renderPartialTicks;
-        entityZ = e.entity.lastTickPosZ + (e.entity.posZ - e.entity.lastTickPosZ) * (double)e.renderPartialTicks;
 		float pitch = e.pitch;
 		float yaw = e.yaw;
  		// Apply mouse rotation.
 		GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
-        if (viewType == 1)
-        {
-        	GlStateManager.translate(0, -mc.thePlayer.eyeHeight, 0);
+    	// Move the camera to its initial position.
+		GlStateManager.translate(init_offset_x, init_offset_y, init_offset_z);
+ 		// Offset the camera so it is static.
+ 		GlStateManager.translate(Strider.playerX,Strider.playerY,Strider.playerZ);
+ 		// Apply the strafe, forward and up to the camera position.
+        if (strafe != 0 || forward != 0 || up != 0){
+        	// Normalize strafe, forward and up.
+            double length = MathHelper.sqrt_double(strafe*strafe + forward*forward + up*up);
+            double s = strafe/length*cameraSpeed;
+            double f = forward/length*cameraSpeed;
+            cameraX += - s*e.renderPartialTicks*MathHelper.cos(yaw/180F*(float)Math.PI)
+            		+ f*e.renderPartialTicks*MathHelper.sin(yaw/180F*(float)Math.PI);
+            cameraZ += - f*e.renderPartialTicks*MathHelper.cos(yaw/180F*(float)Math.PI)
+            		- s*e.renderPartialTicks*MathHelper.sin(yaw/180F*(float)Math.PI);	
+            cameraY += up/length*cameraSpeed;
         }
-        else if (viewType == 0) 
-        {
-        	// Move the camera to its initial position.
-    		GlStateManager.translate(init_offset_x, init_offset_y, init_offset_z);
-     		// Offset the camera so it is static.
-     		GlStateManager.translate(entityX,entityY,entityZ);
-     		// Apply the strafe, forward and up to the camera position.
-            if (strafe != 0 || forward != 0 || up != 0){
-            	// Normalize strafe, forward and up.
-                double length = MathHelper.sqrt_double(strafe*strafe + forward*forward + up*up);
-                double s = strafe/length*cameraSpeed;
-                double f = forward/length*cameraSpeed;
-                cameraX += - s*e.renderPartialTicks*MathHelper.cos(yaw/180F*(float)Math.PI)
-                		+ f*e.renderPartialTicks*MathHelper.sin(yaw/180F*(float)Math.PI);
-                cameraZ += - f*e.renderPartialTicks*MathHelper.cos(yaw/180F*(float)Math.PI)
-                		- s*e.renderPartialTicks*MathHelper.sin(yaw/180F*(float)Math.PI);	
-                cameraY += up/length*cameraSpeed;
-            }
-     		// Move the camera according to user input.
-            GlStateManager.translate(
-            		-(prevCameraX+(cameraX-prevCameraX)*e.renderPartialTicks),
-            		-(prevCameraY+(cameraY-prevCameraY)*e.renderPartialTicks),
-            		-(prevCameraZ+(cameraZ-prevCameraZ)*e.renderPartialTicks));
-            prevCameraX = cameraX;
-            prevCameraY = cameraY;
-            prevCameraZ = cameraZ;
-        }
+ 		// Move the camera according to user input.
+        GlStateManager.translate(
+        		-(prevCameraX+(cameraX-prevCameraX)*e.renderPartialTicks),
+        		-(prevCameraY+(cameraY-prevCameraY)*e.renderPartialTicks),
+        		-(prevCameraZ+(cameraZ-prevCameraZ)*e.renderPartialTicks));
+        prevCameraX = cameraX;
+        prevCameraY = cameraY;
+        prevCameraZ = cameraZ;
         
         mop = rayTraceMouse();
 
 		if (Strider.DEBUG && Strider.tickPrintCnt == 0) {
 			printCameraPosition();
-//			if (mop != null) {
-//				System.out.println(mop.toString());
-//			}
 		}
 		
 	}
@@ -148,9 +134,9 @@ public class StriderCamera {
 		float f = (float) ((viewport.get(0) + viewport.get(2)) / 2);
 		float f1 = (float) ((viewport.get(1) + viewport.get(3)) / 2);
 		GLU.gluUnProject(f, f1, 0F, modelview, projection, viewport, pos);
-		Vec3 pos0 = new Vec3(pos.get(0)+entityX,pos.get(1)+entityY,pos.get(2)+entityZ);
+		Vec3 pos0 = new Vec3(pos.get(0)+Strider.playerX,pos.get(1)+Strider.playerY,pos.get(2)+Strider.playerZ);
 		GLU.gluUnProject(f, f1, 1F, modelview, projection, viewport, pos);
-		Vec3 pos1 = new Vec3(pos.get(0)+entityX,pos.get(1)+entityY,pos.get(2)+entityZ);
+		Vec3 pos1 = new Vec3(pos.get(0)+Strider.playerX,pos.get(1)+Strider.playerY,pos.get(2)+Strider.playerZ);
 		
 		return mc.theWorld.rayTraceBlocks(pos0, pos1);
 	}

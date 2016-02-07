@@ -1,11 +1,12 @@
 package com.megagen.strider.settings;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 import org.lwjgl.input.Mouse;
 
 import com.megagen.strider.Strider;
-import com.megagen.strider.render.StriderCamera;
+import com.megagen.strider.camera.StriderCamera;
 
 public class StriderInputProcessor {
 	private Minecraft mc;
@@ -64,5 +65,9 @@ public class StriderInputProcessor {
 //                }
 			}
 		}
+	}
+
+	public void onKeyInput(KeyInputEvent e) {
+		
 	}
 }
